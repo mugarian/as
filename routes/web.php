@@ -26,7 +26,7 @@ $router->get('/category/{slug}', 'CategoryController@show');
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/profile', 'UserController@show');
-    $router->post('/profile', 'UserController@edit');
+    $router->post('/profile', 'UserController@update');
     $router->delete('/profile', 'UserController@delete');
 });
 

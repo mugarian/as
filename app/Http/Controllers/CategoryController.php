@@ -20,7 +20,8 @@ class CategoryController extends Controller
         //
     }
 
-    public function index() {
+    public function index()
+    {
         $category = Category::all();
         if ($category) {
             return response()->json([
@@ -32,11 +33,11 @@ class CategoryController extends Controller
                 'message' => 'Category Not Found',
                 'data' => NULL
             ], 400);
-
         }
     }
 
-    public function show($slug) {
+    public function show($slug)
+    {
         $category = Category::where('slug', $slug)->first();
         if ($category) {
             return response()->json([
@@ -51,12 +52,13 @@ class CategoryController extends Controller
         }
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validated  = $this->validate($request, [
             'name' => 'required'
         ]);
 
-        $validated['slug'] = Str::of($validated['name'].'-'.rand())->slug();
+        $validated['slug'] = Str::of($validated['name'] . '-' . rand())->slug();
 
         $category = Category::create($validated);
         // $masuk = DB::table('categories')->insert($validated);
@@ -73,7 +75,43 @@ class CategoryController extends Controller
         }
     }
 
-    public function update(Request $request, Category $category) {
-        return dd($category);
+    public function update(Request $request, $slug)
+    {
+        $category = Category::where('slug', $slug)->first();
+        $validated = $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $validated['slug'] = Str::of($validated['name'].'-'.rand())->slug();
+
+        $update = $category->update($validated);
+
+        if ($update) {
+            return response()->json([
+                'message' => 'Category success to update',
+                'data' => $validated
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Category fail to update',
+                'data' => NULL
+            ], 400);
+
+        }
+    }
+
+    public function delete($slug) {
+        $category = Category::where('slug', $slug)->first();
+        $delete = Category::destroy($category->id);
+        if ($delete) {
+            return response()->json([
+                'message' => 'Category has been deleted'
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Category failed to delete'
+            ], 400);
+
+        }
     }
 }
