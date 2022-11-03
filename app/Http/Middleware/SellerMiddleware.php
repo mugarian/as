@@ -15,7 +15,7 @@ class SellerMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (!auth()->check() || auth()->user()->role != 'seller' ) {
+        if (!auth()->check() || auth()->user()->role == 'buyer' ) {
             return response()->json(['message' => 'Forbidden. Only Seller can access!'], 403);
         }
 

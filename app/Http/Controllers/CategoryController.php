@@ -54,11 +54,13 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        $request['slug'] = Str::of($request['name'] . '-' . rand())->slug();
+
         $validated  = $this->validate($request, [
-            'name' => 'required'
+            'name' => 'required',
+            'slug' => 'required|unique:categories,slug'
         ]);
 
-        $validated['slug'] = Str::of($validated['name'] . '-' . rand())->slug();
 
         $category = Category::create($validated);
         // $masuk = DB::table('categories')->insert($validated);
@@ -78,11 +80,11 @@ class CategoryController extends Controller
     public function update(Request $request, $slug)
     {
         $category = Category::where('slug', $slug)->first();
+        $request['slug'] = Str::of($request['name'].'-'.rand())->slug();
         $validated = $this->validate($request, [
             'name' => 'required'
         ]);
 
-        $validated['slug'] = Str::of($validated['name'].'-'.rand())->slug();
 
         $update = $category->update($validated);
 

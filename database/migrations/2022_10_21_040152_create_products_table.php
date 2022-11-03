@@ -20,14 +20,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('desc');
-            $table->string('artist');
+            $table->string('artist')->nullable();
             $table->string('dimension');
             $table->bigInteger('price');
             $table->tinyInteger('discount')->nullable();
             $table->integer('quantity');
             $table->text('image');
             $table->string('tags')->nullable();
-
+            $table->timestamps();
         });
     }
 

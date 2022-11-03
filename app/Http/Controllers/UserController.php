@@ -67,7 +67,7 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
-        $user = DB::table('users')->where('username', $validated['useremail'])->orWhere('email', $validated['useremail'])->first();
+        $user = User::where('username', $validated['useremail'])->orWhere('email', $validated['useremail'])->first();
 
         if (!Hash::check($validated['password'], $user->password)) {
             return response()->json([
